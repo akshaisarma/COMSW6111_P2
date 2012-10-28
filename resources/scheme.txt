@@ -1,0 +1,10 @@
+# This is the categorization scheme. All the sentences after '#' are ignored.
+# The first line starting with '{' contains all the nodes (must be in {a,b,...,n}). The first one is root.
+# Other lines are in the format of "<parent>:[<child1>,<child2>,...,<childn>]"
+# no space in any place
+
+{Root,Computers,Health,Sports,Hardware,Programming,Fitness,Diseases,Basketball,Soccer}
+Root:[Computers,Health,Sports]
+Computers:[Hardware,Programming]
+Health:[Fitness,Diseases]
+Sports:[Basketball,Soccer]
