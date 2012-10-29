@@ -1,3 +1,41 @@
+**** For "yahoo.com; tes=0.6; tec=100" ****
+
+Classifying...
+Specificity for category:Computers is 0.10551536962011861
+Coverage for category:Computers is 30771500
+Specificity for category:Health is 0.552123320434591
+Coverage for category:Health is 161016000
+Specificity for category:Sports is 0.34236130994529035
+Coverage for category:Sports is 99843000
+
+
+Classification:
+Root
+
+**** For "yahoo.com; tes=0.3; tec=100" ****
+
+Classifying...
+Specificity for category:Computers is 0.10551536962011861
+Coverage for category:Computers is 30771500
+Specificity for category:Health is 0.552123320434591
+Coverage for category:Health is 161016000
+Specificity for category:Diseases is 0.2803192018168566
+Coverage for category:Diseases is 67792800
+Specificity for category:Fitness is 0.2718041186177344
+Coverage for category:Fitness is 65733500
+Specificity for category:Sports is 0.34236130994529035
+Coverage for category:Sports is 99843000
+Specificity for category:Basketball is 0.20672529175053792
+Coverage for category:Basketball is 35479180
+Specificity for category:Soccer is 0.13563601819475243
+Coverage for category:Soccer is 23278500
+
+
+Classification:
+Root/Health
+Root/Sports
+
+
 *** sample.sh ***
 tes=0.6
 tec=100

@@ -89,7 +89,7 @@ public class SchemeTree {
 		}
 	}
 
-	// add the queries
+	// add the queries recursively
 	void addQueryList(TreeNode node){
 		// no need to add querylist if this is leaf
 		if (node!=null && !node.isLeaf){
