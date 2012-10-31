@@ -35,12 +35,21 @@ public class Part2 {
 		 */
 		for (QueryResult qr : soFar.queryResults) {
 			System.out.println(++count + "/" + len);
+			if (qr.multiWord)
+				System.out.println("Skipping as multi-word query");
 			for (String u : qr.urls)
 				System.out.println("\n\nGetting page:" + u);
 		}
 		
 		for (String query : node.queryList) {
 			System.out.println(++count + "/" + len);
+			/* Skipping multiword queries as suggested on Project writeup */
+			if (query.split(" ").length > 1) {
+				System.out.println("Skipping as multi-word query");
+				soFar.nodeSummary.addMultiWord(query);
+				soFar.queryResults.add(new QueryResult(query));
+				continue;
+			}
 			HashSet<String> res = searcher.getTopFour(site, query);
 			res.removeAll(allURLS);
 			allURLS.addAll(res);
@@ -72,10 +81,17 @@ public class Part2 {
 class QueryResult {
 	String query;
 	HashSet<String> urls;
+	boolean multiWord = false;
 	
 	public QueryResult (String q, HashSet<String> u) {
 		query = q;
 		urls = u;
+	}
+	
+	public QueryResult (String q) {
+		query = q;
+		urls = new HashSet<String>();
+		multiWord = true;
 	}
 	
 	public boolean equals (Object o) {
@@ -131,6 +147,10 @@ class NodeSummary {
 	
 	public NodeSummary() {
 		summary = new HashMap<String, Integer>();
+	}
+	
+	public void addMultiWord(String multiWord) {
+		summary.put(multiWord, 0);
 	}
 	
 	public void mergeSummary(HashMap<String, Integer> otherTable) {
