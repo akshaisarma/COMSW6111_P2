@@ -1,16 +1,14 @@
 // Author: Yuan Du (yd2234@columbia.edu)
+// Minor Author: Akshai Sarma (as4107@columbia.edu)
 // Date: Oct 27, 2012
 // Function: return the number of documents match the query in the given site
-
-// package columbia.edu.adb;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashSet;
 import java.util.regex.*;
-
-//Download and add this library to the build path.
 import org.apache.commons.codec.binary.Base64;
 
 public class BingSearch {
@@ -20,9 +18,14 @@ public class BingSearch {
 		String site = "cancer.org";
 		String query = "application windows";
 		String accountKey = "MWQrrA8YW+6ciAUTJh56VHz1vi/Mdqu0lSbzms3N7NY=";
-		int number = new BingSearch().getDocNum(site, query, accountKey);
+		int number = new BingSearch(accountKey).getDocNum(site, query);
 		System.out.println("number of docs is "+number);
 	}
+	
+	public BingSearch (String key) {
+		this.accountKey = key;		
+	}
+	
 	/*
 	 * Return the xml output from Bing by the url
 	 */ 
@@ -43,10 +46,11 @@ public class BingSearch {
 		//The content string is the xml/json output from Bing.
 		return content;
 	}
+	
 	/*
 	 * Parse the xml output from Bing into the number of docs
 	 */ 
-	public int parseXML(String content){
+	private int getTotal (String content){
 		int number = 0;
 		Pattern p = Pattern.compile(".*<d:WebTotal m:type=\"Edm.Int64\">([0-9]+)</d:WebTotal>.*");
 		Matcher m = p.matcher(content);
@@ -56,11 +60,11 @@ public class BingSearch {
 		}
 		return number;
 	}
+	
 	/*
 	 * Get the number of documents match the query in the given site
 	 */
-	public int getDocNum(String site, String query, String accountKey){
-		this.accountKey = accountKey; 
+	public int getDocNum(String site, String query){
 		query = query.replace(" ", "+");
 		int number = 0;
 		// define the url for Bing search
@@ -72,11 +76,27 @@ public class BingSearch {
 			String content = searchBingResult(bingUrl);
 			// String content = "null";
 			// System.out.println(content);
-			number = parseXML(content);
+			number = getTotal(content);
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 		return number;
+	}
+	
+	public HashSet<String> getTopFour(String site, String query) {
+		HashSet<String> result = new HashSet<String>();
+		String bingQuery = "https://api.datamarket.azure.com/Data.ashx/Bing/SearchWeb/v1/Web?Query=%27site%3a"
+							+ site + "%20" + query.replace(" ", "+") + "%27&$top=4&$format=Atom";
+		try {
+			String content = searchBingResult(bingQuery);
+			Pattern p = Pattern.compile("<d:Url m:type=\"Edm.String\">(.+?)</d:Url>");
+			Matcher m = p.matcher(content);
+			while (m.find()) 
+				result.add(m.group(1));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }

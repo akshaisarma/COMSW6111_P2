@@ -1,4 +1,5 @@
 // Author: Yuan Du (yd2234@columbia.edu)
+// Author: Akshai Sarma (as4107@columbia.edu)
 // Date: Oct 27, 2012
 // Function: build the categorization scheme tree and add the queries for each node
 
@@ -9,6 +10,7 @@ public class SchemeTree {
 	TreeNode root;
 	HashMap<String, TreeNode> nameMapNode;
 	String queryDir;
+	
 	public static void main(String[] args){
 		String schemeFile = "../resources/scheme.txt";
 		SchemeTree tree = new SchemeTree(schemeFile);
@@ -132,14 +134,16 @@ class TreeNode{
 	TreeNode parent = null;
 	ArrayList<TreeNode> children;
 	ArrayList<String> queryList;
+	HashSet<String> retrievedURLs; // set of top 4 results for each query probe
 	boolean isLeaf = true; // default is leaf, unless it has >=1 children
-	// Please put other variables here
-
+	boolean visited = false; // Whether this node was deemed worthy of expansion
+	
 	TreeNode(String name){
 		this.name = name;
 		// initialization
 		children = new ArrayList<TreeNode>();
 		queryList = new ArrayList<String>();
+		retrievedURLs = new HashSet<String>();
 	}
 
 	void setParent(TreeNode parent){
