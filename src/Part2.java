@@ -47,7 +47,9 @@ public class Part2 {
 			if (query.split(" ").length > 1) {
 				System.out.println("Skipping as multi-word query");
 				soFar.nodeSummary.addMultiWord(query);
-				soFar.queryResults.add(new QueryResult(query));
+				QueryResult multiWord = new QueryResult(query);
+				if (!soFar.queryResults.contains(multiWord))
+					soFar.queryResults.add(multiWord);
 				continue;
 			}
 			HashSet<String> res = searcher.getTopFour(site, query);
