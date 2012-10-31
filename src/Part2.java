@@ -133,10 +133,6 @@ class NodeSummary {
 		summary = new HashMap<String, Integer>();
 	}
 	
-	public void addMultiWord(String multiWord) {
-		summary.put(multiWord, 0);
-	}
-	
 	public void mergeSummary(HashMap<String, Integer> otherTable) {
 		for (String s : otherTable.keySet()) {
 			Integer freq = otherTable.get(s);
