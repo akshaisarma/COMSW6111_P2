@@ -34,24 +34,13 @@ public class Part2 {
 		 * implementation's behavior).
 		 */
 		for (QueryResult qr : soFar.queryResults) {
-			System.out.println(++count + "/" + len);
-			if (qr.multiWord)
-				System.out.println("Skipping as multi-word query");
+			System.out.println(++count + "/" + len);;
 			for (String u : qr.urls)
 				System.out.println("\n\nGetting page:" + u);
 		}
 		
 		for (String query : node.queryList) {
 			System.out.println(++count + "/" + len);
-			/* Skipping multiword queries as suggested on Project writeup */
-			if (query.split(" ").length > 1) {
-				System.out.println("Skipping as multi-word query");
-				soFar.nodeSummary.addMultiWord(query);
-				QueryResult multiWord = new QueryResult(query);
-				if (!soFar.queryResults.contains(multiWord))
-					soFar.queryResults.add(multiWord);
-				continue;
-			}
 			HashSet<String> res = searcher.getTopFour(site, query);
 			res.removeAll(allURLS);
 			allURLS.addAll(res);
@@ -78,37 +67,6 @@ public class Part2 {
 		return result;
 	}
 	
-}
-
-class QueryResult {
-	String query;
-	HashSet<String> urls;
-	boolean multiWord = false;
-	
-	public QueryResult (String q, HashSet<String> u) {
-		query = q;
-		urls = u;
-	}
-	
-	public QueryResult (String q) {
-		query = q;
-		urls = new HashSet<String>();
-		multiWord = true;
-	}
-	
-	public boolean equals (Object o) {
-		if (o == null)
-			return false;
-		if (o == this)
-			return true;
-		if (!(o instanceof QueryResult))
-			return false;
-		QueryResult ob = (QueryResult) o;
-		if (query.equals(ob.query))
-			return true;
-		else 
-			return false;
-	}
 }
 
 class NodeInformation {
@@ -141,6 +99,30 @@ class NodeInformation {
 			e.printStackTrace();
 		}
 				
+	}
+}
+
+class QueryResult {
+	String query;
+	HashSet<String> urls;
+	
+	public QueryResult (String q, HashSet<String> u) {
+		query = q;
+		urls = u;
+	}
+	
+	public boolean equals (Object o) {
+		if (o == null)
+			return false;
+		if (o == this)
+			return true;
+		if (!(o instanceof QueryResult))
+			return false;
+		QueryResult ob = (QueryResult) o;
+		if (query.equals(ob.query))
+			return true;
+		else 
+			return false;
 	}
 }
 
