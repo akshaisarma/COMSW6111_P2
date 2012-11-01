@@ -1,11 +1,10 @@
-import java.io.*;
-import java.util.*;
-
 /*
  *  Author: Akshai Sarma (as4107@columbia.edu)
  *  Implements Part 2 of Project 2. This class 
  *  will be used in Part 1.
  */
+import java.io.*;
+import java.util.*;
 
 public class Part2 {
 	TreeNode visitedTree;
@@ -23,10 +22,23 @@ public class Part2 {
 	public void outputContentSummaries() {
 		postOrder(visitedTree);
 	}
+	/* Queries are stored with children - to naturally associate them with the children
+	 * rather than keep many lists for each child in parent. This function simply gets
+	 * all the queries and returns them.
+	 */
+	private ArrayList<String> getQueries(TreeNode node) {
+		ArrayList<String> result = new ArrayList<String>();
+		if (node.isLeaf)
+			return result;
+		for (TreeNode n : node.children)
+			result.addAll(n.queryList);
+		return result;
+	} 
 	
 	private void addNodeInformation(TreeNode node, NodeInformation soFar) {
 		System.out.println("Creating Content Summary for:" + node.name);
-		int count = 0, len = soFar.queryResults.size() + node.queryList.size();
+		ArrayList<String> queryList = getQueries(node);
+		int count = 0, len = soFar.queryResults.size() + queryList.size();
 	
 		/* 
 		 * This loop simply prints all the visited descendants' Getting Page lines
@@ -39,7 +51,7 @@ public class Part2 {
 				System.out.println("\n\nGetting page:" + u);
 		}
 		
-		for (String query : node.queryList) {
+		for (String query : queryList) {
 			System.out.println(++count + "/" + len);
 			HashSet<String> res = searcher.getTopFour(site, query);
 			res.removeAll(allURLS);
@@ -56,7 +68,8 @@ public class Part2 {
 	
 	private NodeInformation postOrder(TreeNode node) {
 		NodeInformation result = new NodeInformation();
-		if (!node.visited)
+		/* If "unvisited" or is a leaf, return as no need to construct summary */
+		if (!node.visited || node.isLeaf)
 			return result;
 		
 		for (TreeNode child : node.children)
@@ -92,7 +105,9 @@ class NodeInformation {
 		try {
 			FileWriter f = new FileWriter(fileName);
 			BufferedWriter o = new BufferedWriter(f);
-			for (String s : summary.keySet())
+			ArrayList<String> words = new ArrayList<String>(summary.keySet());
+			Collections.sort(words);
+			for (String s : words)
 				o.write(s + "#" + summary.get(s) + "\n");
 			o.close();
 		} catch (IOException e) {

@@ -6,7 +6,6 @@
 import java.util.*;
 
 public class Part1 {
-	String cacheDir = "./cache/";
 	String accountKey;
 	TreeNode tree;
 	
@@ -14,7 +13,7 @@ public class Part1 {
 	
 		String accountKey = "MWQrrA8YW+6ciAUTJh56VHz1vi/Mdqu0lSbzms3N7NY=";
 		String site = "yahoo.com";
-		double t_es = 0.6;
+		double t_es = 0.3;
 		int t_ec = 100;
 		
 		if (args.length == 5) {
@@ -82,13 +81,13 @@ public class Part1 {
 
 	// recursively visit the nodes from c to its children, and get the valid categories
 	ArrayList<TreeNode> getCategoryResults(TreeNode c, String site, double t_es, int t_ec, double c_specificity){
+		c.visited = true;
 		ArrayList<TreeNode> results = new ArrayList<TreeNode> ();
 		// check if this is a leaf node
 		if (c.isLeaf){
 			results.add(c);
 			return results;
 		}
-
 		ArrayList<TreeNode> childrenList = c.children;
 		int size = childrenList.size();
 
@@ -116,7 +115,6 @@ public class Part1 {
 				if (es>=t_es && ec_list[i]>=t_ec){
 					// System.out.println("es>=t_ec && ec_list[i]>=t_ec! for node="+childNode.name);
 					// get the categorization results for this child, and add it to the results for node c
-					childNode.visited = true;
 					ArrayList<TreeNode> newResults = getCategoryResults(childNode, site, t_es, t_ec, es);
 					results.addAll(newResults);
 				}
