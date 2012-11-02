@@ -8,15 +8,15 @@ import java.util.*;
 public class Part1 {
 	String accountKey;
 	TreeNode tree;
-	
+
 	Part1 (String accountKey) {
 		this.accountKey = accountKey;
 	}
-	
+
 	void createTree() {
-		String schemeFile = "../resources/scheme.txt";
+		String schemeFile = "resources/scheme.txt";
 		SchemeTree tree = new SchemeTree(schemeFile);
-		tree.queryDir = "../resources/";
+		tree.queryDir = "resources/";
 		tree.addQueryList(tree.root);
 		this.tree = tree.root;
 	}
@@ -24,9 +24,9 @@ public class Part1 {
 	void classifyDB(String site, double t_es, int t_ec){
 		// create the scheme tree and add the query list
 		createTree();
-		
+
 		// get the classification results
-		ArrayList<TreeNode> results = getCategoryResults(this.tree, site, t_es, t_ec, 1.0);	
+		ArrayList<TreeNode> results = getCategoryResults(this.tree, site, t_es, t_ec, 1.0);
 
 		// print the classification
 		printClassification(results);
@@ -44,7 +44,7 @@ public class Part1 {
 				cate = node.name+"/"+cate;
 				node = node.parent;
 			}
-			System.out.println(cate);	
+			System.out.println(cate);
 		}
 	}
 
@@ -114,4 +114,3 @@ public class Part1 {
 		return coverage;
 	}
 }
-

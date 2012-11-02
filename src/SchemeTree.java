@@ -10,20 +10,6 @@ public class SchemeTree {
 	TreeNode root;
 	HashMap<String, TreeNode> nameMapNode;
 	String queryDir;
-	
-	public static void main(String[] args){
-		String schemeFile = "../resources/scheme.txt";
-		SchemeTree tree = new SchemeTree(schemeFile);
-		tree.queryDir = "../resources/";
-
-		// System.out.println(tree.root.children.get(2).isLeaf);
-		tree.addQueryList(tree.root);
-
-		// print all the queries for soccer
-		ArrayList<String> queryList = tree.nameMapNode.get("Soccer").queryList;
-		for(int i = 0;i<queryList.size();i++)
-			System.out.println(queryList.get(i));
-	}
 
 	// create the scheme tree by the file
 	SchemeTree(String schemeFile){
@@ -101,7 +87,7 @@ public class SchemeTree {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(queryFile));
 				while ((line = br.readLine()) != null) {
-					// format: 
+					// format:
 					// Computers cpu
 					int index = line.indexOf(" ");
 					String category = line.substring(0,index);
