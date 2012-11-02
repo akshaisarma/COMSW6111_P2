@@ -11,7 +11,7 @@ b) A list of all the files that you are submitting:
 * run.sh 		 (a shell script that runs all the codes)
 * UI.py 		 (the main python script for the user interface and ranking)
 * README.txt 	 (this readme file)
-TODO...
+TODO Yuan
 
 -------------------------------------------------------------
 c) A clear description of how to run your program
@@ -27,11 +27,30 @@ Similar to the reference, run the following from the directory where you put all
 <host> is the URL of the database to be classified
 
 For example, on a CLIC machine:
-cd /home/yd2234/ADB/proj2/code/COMSW6111_P2/src/run.sh
-./run.sh 'MWQrrA8YW+6ciAUTJh56VHz1vi/Mdqu0lSbzms3N7NY=' 0.6 100 'cancer.org'
+cd /home/yd2234/ADB/proj2/code/COMSW6111_P2/src/
+./run.sh 'MWQrrA8YW+6ciAUTJh56VHz1vi/Mdqu0lSbzms3N7NY=' 0.6 100 'fifa.org'
 
 You can run our scripts directly by the commands above, since we have already put our scripts under that directory.
 
 -------------------------------------------------------------
 d) A clear description of the internal design of your project
 
+-- Part 1
+TODO Yuan
+
+
+-- Part 2
+TODO Akshai
+
+-------------------------------------------------------------
+e) Your Bing account key (so we can test your project):
+016GbojIly0TI22M7M71RWi513jNhJ04ZcYbF71MeYY=
+
+-------------------------------------------------------------
+f) Any additional information that you consider significant.
+
+1. How to deal with multiple-word entries:
+TODO Akshai
+
+2. How to deal with pdf:
+TODO Akshai
