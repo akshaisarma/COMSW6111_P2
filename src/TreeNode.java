@@ -13,7 +13,7 @@ public class TreeNode {
 	// Following are empty if visited is false after Part 2 is finished
 	HashSet<String> samples; // Set of document samples for it and all visited descendants
 	ContentSummary summary; // Content summary for this node and all visited descendants
-	
+
 	TreeNode(String name) {
 		this.name = name;
 		// initialization
@@ -22,7 +22,7 @@ public class TreeNode {
 		samples = new HashSet<String>();
 		summary = new ContentSummary();
 	}
-	
+
 	/* Queries are stored with children - to naturally associate them with the children
 	 * rather than keep many lists for each child in parent. This function simply gets
 	 * all the queries and returns them.
@@ -34,7 +34,7 @@ public class TreeNode {
 		for (TreeNode n : children)
 			result.addAll(n.queryList);
 		return result;
-	} 
+	}
 
 	/* Iterates over children and adds all their samples. Even adds visited=false children
 	 * but they are empty, so it's ok.
@@ -45,7 +45,7 @@ public class TreeNode {
 			result.addAll(n.samples);
 		return result;
 	}
-	
+
 	/* Also iterates through children summaries and merges. Again for visited = false also
 	 * but they are empty.
 	 */
@@ -53,11 +53,11 @@ public class TreeNode {
 		for (TreeNode n : children)
 			summary.mergeSummary(n.summary);
 	}
-	
+
 	public void setParent(TreeNode parent){
 		this.parent = parent;
 	}
-	
+
 	public void addChild(TreeNode child){
 		this.children.add(child);
 	}
@@ -67,14 +67,17 @@ public class TreeNode {
 	}
 }
 
-/* Class for storing the content summary - word + its document frequency */
+/* Class for storing the content summary - word + its document frequency
+ * Uses a TreeMap for keeping it sorted even though we incur log(n) for
+ * inserting.
+ */
 class ContentSummary {
 	TreeMap<String, Integer> summary;
-	
+
 	public ContentSummary() {
 		summary = new TreeMap<String, Integer>();
 	}
-	
+
 	public void addWords(HashSet<String> words) {
 		for (Iterator<String> it = words.iterator(); it.hasNext(); ) {
 			String word = it.next();
@@ -82,7 +85,7 @@ class ContentSummary {
 			summary.put(word, v == null ? 1 : v+1);
 		}
 	}
-	
+
 	public void mergeSummary(ContentSummary other) {
 		for (String s : other.summary.keySet()) {
 			Integer freq = other.summary.get(s);
@@ -90,7 +93,8 @@ class ContentSummary {
 			summary.put(s, v == null ? freq : v + freq);
 		}
 	}
-	
+
+	/* Writes the TreeMap to a file with fileName alphabetically */
 	public void writeOut(String fileName) {
 		try {
 			FileWriter f = new FileWriter(fileName);
@@ -101,6 +105,6 @@ class ContentSummary {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-				
+
 	}
 }
