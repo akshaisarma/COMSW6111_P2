@@ -68,13 +68,12 @@ The first function getDocNum is used in part1 and the second function getTopFour
 2. SchemeTree.java
 This is a script used to build the categorization scheme tree and add the queries for each node. The main functions include:
 	* SchemeTree (constructor): create the scheme tree by the file scheme.txt (under the folder resources)
-	* addQueryList: add the queries recursively into the tree nodes
-The first function getDocNum is used in part1 and the second function getTopFour will be used in part2.
+	* addQueryList: add the queries in the four query files recursively into the tree nodes
 
 3. TreeNode.java
 This is a script used to define two classes: 
 	* TreeNode: define the class for nodes of the tree and its associated helper classes
-	* addQueryList: define the class for storing the content summary - word + its document frequency 
+	* ContentSummary: define the class for storing the content summary, including word and its document frequency 
 
 4. Part1.java
 This is the main java script for classifying databases in part1. The main functions include:
@@ -86,9 +85,11 @@ This is the main java script for classifying databases in part1. The main functi
 	(Detailed information for each of them are below)
 
 	* createTree: build the categorization scheme by calling the functions defined in SchemeTree.java. It returns the root of the scheme tree for traversal.
-	* getCategoryResults: implement the algorithm in Figure 4 of the paper. Recursively visit the nodes from current node c to its children, and get the valid categories. 
-	In this algorithm, we will check if the any child has large enough coverage and specificity. If so, we can go deeper into that child node.
-	* getCoverage: get the coverage of one node in the given site. This is sum up the number of matching documents for all the queries in this node.
+	
+	* getCategoryResults: implement the algorithm in Figure 4 of the QProber paper. Recursively visit the nodes from current node c to its children, and get the valid categories. 
+	In this algorithm, we will check if the any child has large enough coverage and specificity above the given thresholds. If so, we can go deeper into that child node.
+	
+	* getCoverage: get the coverage of one node in the given site. This will sum up the number of matching documents for all the queries in this node.
 	It's called by function getCategoryResults to compute the specificity.
 
 -- Part 2
