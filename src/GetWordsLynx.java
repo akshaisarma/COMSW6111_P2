@@ -3,6 +3,9 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.util.HashSet;
 
+/* The Same exact sample script that was provided except we changed it to
+ * use a HashSet for efficiency.
+ */
 public class GetWordsLynx {
 
     public static HashSet<String> runLynx(String url) {
@@ -11,7 +14,7 @@ public class GetWordsLynx {
         StringBuffer buffer = new StringBuffer(buffersize);
 
         try {
-        	
+
             String cmdline[] = {"/usr/bin/lynx", "--dump", url };
             Process p = Runtime.getRuntime().exec(cmdline);
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -71,7 +74,6 @@ public class GetWordsLynx {
 
         while (st.hasMoreTokens()) {
             String tok = st.nextToken();
-            //System.out.println(tok);
             document.add(tok);
         }
         return document;
