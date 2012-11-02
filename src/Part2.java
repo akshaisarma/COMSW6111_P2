@@ -59,6 +59,9 @@ public class Part2 {
 		}
 		node.samples.addAll(allURLs);
 		node.mergeChildSummaries();
+		// add a new line after each node
+		System.out.println();
+
 	}
 	
 	private NodeInformation postOrder(TreeNode node) {

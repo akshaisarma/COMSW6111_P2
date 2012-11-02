@@ -3,8 +3,8 @@
 # Other lines are in the format of "<parent>:[<child1>,<child2>,...,<childn>]"
 # no space in any place
 
-{Root,Computers,Health,Sports,Hardware,Programming,Fitness,Diseases,Basketball,Soccer}
+{Root,Computers,Health,Sports,Hardware,Programming,Diseases,Fitness,Basketball,Soccer}
 Root:[Computers,Health,Sports]
 Computers:[Hardware,Programming]
-Health:[Fitness,Diseases]
+Health:[Diseases,Fitness]
 Sports:[Basketball,Soccer]
