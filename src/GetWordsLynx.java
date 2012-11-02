@@ -1,11 +1,11 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.StringTokenizer;
+import java.util.HashSet;
 
-public class getWordsLynx {
+public class GetWordsLynx {
 
-    public static HashMap<String, Integer> runLynx(String url) {
+    public static HashSet<String> runLynx(String url) {
 
         int buffersize = 40000;
         StringBuffer buffer = new StringBuffer(buffersize);
@@ -66,15 +66,15 @@ public class getWordsLynx {
                 }
             }
         }
-        HashMap<String, Integer> words = new HashMap<String, Integer>();
+        HashSet<String> document = new HashSet<String>();
         StringTokenizer st = new StringTokenizer(output.toString());
 
         while (st.hasMoreTokens()) {
             String tok = st.nextToken();
-            Integer v = words.get(tok);
-            words.put(tok, v == null ? 1 : v + 1); 
+            //System.out.println(tok);
+            document.add(tok);
         }
-        return words;
+        return document;
     }
 
     public static void main(String args[]) {

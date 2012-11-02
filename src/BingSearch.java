@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.regex.*;
 import org.apache.commons.codec.binary.Base64;
 
@@ -83,8 +83,8 @@ public class BingSearch {
 		return number;
 	}
 	
-	public HashSet<String> getTopFour(String site, String query) {
-		HashSet<String> result = new HashSet<String>();
+	public ArrayList<String> getTopFour(String site, String query) {
+		ArrayList<String> result = new ArrayList<String>();
 		String bingQuery = "https://api.datamarket.azure.com/Data.ashx/Bing/SearchWeb/v1/Web?Query=%27site%3a"
 							+ site + "%20" + query.replace(" ", "+") + "%27&$top=4&$format=Atom";
 		try {

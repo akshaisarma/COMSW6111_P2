@@ -1,45 +1,37 @@
 /*
  *  Author: Akshai Sarma (as4107@columbia.edu)
- *  Implements Part 2 of Project 2. This class 
- *  will be used in Part 1.
+ *  Implements Part 2 of Project 2. 
  */
-import java.io.*;
 import java.util.*;
 
 public class Part2 {
 	TreeNode visitedTree;
 	String site;
-	HashSet<String> allURLS;
 	BingSearch searcher;
 	
 	public Part2(String key, TreeNode tree, String site) {
 		this.visitedTree = tree;
 		this.site = site;
-		this.allURLS = new HashSet<String>();
 		this.searcher = new BingSearch(key);
 	}
 	
 	public void outputContentSummaries() {
 		postOrder(visitedTree);
 	}
-	/* Queries are stored with children - to naturally associate them with the children
-	 * rather than keep many lists for each child in parent. This function simply gets
-	 * all the queries and returns them.
-	 */
-	private ArrayList<String> getQueries(TreeNode node) {
-		ArrayList<String> result = new ArrayList<String>();
-		if (node.isLeaf)
-			return result;
-		for (TreeNode n : node.children)
-			result.addAll(n.queryList);
-		return result;
-	} 
 	
-	private void addNodeInformation(TreeNode node, NodeInformation soFar) {
+	private void removeDuplicates (ArrayList<String> urls, HashSet<String> allURLs) {
+		for (Iterator<String> it = urls.iterator(); it.hasNext(); ) {
+			String url = it.next();
+			if (allURLs.contains(url))
+				it.remove();
+		}
+	}
+	
+	private void generateContentSummary(TreeNode node, NodeInformation soFar) {
 		System.out.println("Creating Content Summary for:" + node.name);
-		ArrayList<String> queryList = getQueries(node);
+		ArrayList<String> queryList = node.getQueries();
 		int count = 0, len = soFar.queryResults.size() + queryList.size();
-	
+
 		/* 
 		 * This loop simply prints all the visited descendants' Getting Page lines
 		 * but doesn't actually retrieve anything (to match the reference 
@@ -51,19 +43,22 @@ public class Part2 {
 				System.out.println("\n\nGetting page:" + u);
 		}
 		
+		HashSet<String> allURLs = node.getChildSamples();
+		
 		for (String query : queryList) {
 			System.out.println(++count + "/" + len);
-			HashSet<String> res = searcher.getTopFour(site, query);
-			res.removeAll(allURLS);
-			allURLS.addAll(res);
+			ArrayList<String> res = searcher.getTopFour(site, query);
+			removeDuplicates(res, allURLs);
+			allURLs.addAll(res);
 			QueryResult newResult = new QueryResult(query, res);
 			soFar.queryResults.add(newResult);
-			for (Iterator<String> it = res.iterator(); it.hasNext(); ) {
-				String url = it.next();
-				System.out.println ("\n\nGetting page:" + url);
-				soFar.nodeSummary.mergeSummary(getWordsLynx.runLynx(url));
+			for (String url : res) {
+				System.out.println("\n\nGetting page:" + url);
+				node.summary.addWords(GetWordsLynx.runLynx(url));
 			}
-		}		
+		}
+		node.samples.addAll(allURLs);
+		node.mergeChildSummaries();
 	}
 	
 	private NodeInformation postOrder(TreeNode node) {
@@ -75,53 +70,33 @@ public class Part2 {
 		for (TreeNode child : node.children)
 			result.mergeNode(postOrder(child));
 
-		addNodeInformation(node, result);
-		result.writeOut("sample-" + node.name + "-" + site + ".txt");
+		generateContentSummary(node, result);
+		node.summary.writeOut(node.name + "-" + site + ".txt");
 		return result;
 	}
 	
 }
 
+/* Helper class for propagating queries made at children upward in order to not walk tree
+ * over and over.
+ */
 class NodeInformation {
 	ArrayList<QueryResult> queryResults;
-	NodeSummary nodeSummary;
 	
 	public NodeInformation() {
 		queryResults = new ArrayList<QueryResult>();
-		nodeSummary = new NodeSummary();
-	}
-	
-	public void mergeURLs(ArrayList<QueryResult> other) {
-		queryResults.addAll(other);
 	}
 	
 	public void mergeNode(NodeInformation other) {
-		mergeURLs(other.queryResults);
-		nodeSummary.mergeSummary(other.nodeSummary.summary);
-	}
-	
-	public void writeOut(String fileName) {
-		HashMap<String, Integer> summary = nodeSummary.summary;
-		try {
-			FileWriter f = new FileWriter(fileName);
-			BufferedWriter o = new BufferedWriter(f);
-			ArrayList<String> words = new ArrayList<String>(summary.keySet());
-			Collections.sort(words);
-			for (String s : words)
-				o.write(s + "#" + summary.get(s) + "\n");
-			o.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-				
+		queryResults.addAll(other.queryResults);
 	}
 }
 
 class QueryResult {
 	String query;
-	HashSet<String> urls;
+	ArrayList<String> urls;
 	
-	public QueryResult (String q, HashSet<String> u) {
+	public QueryResult (String q, ArrayList<String> u) {
 		query = q;
 		urls = u;
 	}
@@ -138,21 +113,5 @@ class QueryResult {
 			return true;
 		else 
 			return false;
-	}
-}
-
-class NodeSummary {
-	HashMap<String, Integer> summary;
-	
-	public NodeSummary() {
-		summary = new HashMap<String, Integer>();
-	}
-	
-	public void mergeSummary(HashMap<String, Integer> otherTable) {
-		for (String s : otherTable.keySet()) {
-			Integer freq = otherTable.get(s);
-			Integer v = summary.get(s);
-			summary.put(s, v == null ? freq : v + freq);
-		}
 	}
 }
