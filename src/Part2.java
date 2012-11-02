@@ -30,6 +30,14 @@ public class Part2 {
 		}
 	}
 
+	private void adjustSummary (TreeNode n, HashMap<String, Integer> overlaps) {
+		for (Iterator<String> it = overlaps.keySet().iterator(); it.hasNext(); ) {
+			String url = it.next();
+			n.summary.removeWordCounts(GetWordsLynx.runLynx(url), overlaps.get(url));
+		}
+		
+	}
+	
 	/* Core of the class. For each node, using the accumulated information soFar
 	 * in the post order traversal of the tree, generates the content summary for
 	 * the node. Only has to look at the immediate children as by post order
@@ -55,8 +63,7 @@ public class Part2 {
 		 * in soFar so that this node's ancestors know what to print. For each url, the
 		 * the document frequency is obtained and merged together for the URLs of the queries
 		 */
-		HashSet<String> allURLs = node.getChildSamples();
-
+		HashSet<String> allURLs = new HashSet<String>(node.getChildSamples());
 		for (String query : queryList) {
 			System.out.println(++count + "/" + len);
 			ArrayList<String> res = searcher.getTopFour(site, query);
@@ -74,6 +81,11 @@ public class Part2 {
 	 	 */
 		node.samples.addAll(allURLs);
 		node.mergeChildSummaries();
+		
+		/* If there was overlap, adjust summary to account for that */
+		HashMap<String, Integer> overLaps = node.getOverlappingChildSamples();
+		if (!overLaps.keySet().isEmpty())
+			adjustSummary(node, overLaps);
 	}
 
 	/* Performs a post order traversal of the visited part of the tree

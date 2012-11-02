@@ -46,6 +46,28 @@ public class TreeNode {
 		return result;
 	}
 
+	/* Returns the URLs and count of overlapping URLs that are shared between children */
+	public HashMap<String, Integer> getOverlappingChildSamples() {
+		HashMap<String, Integer> result = new HashMap<String, Integer>();
+		HashSet<String> considered = new HashSet<String>();
+		for (TreeNode n : children)
+			for (Iterator<String> it = n.samples.iterator(); it.hasNext(); ) {
+				String url = it.next();
+				if (considered.contains(url))
+					continue;
+				for (TreeNode m : children) {
+					if (m == n)
+						continue;
+					if (m.samples.contains(url)) {
+						Integer v = result.get(url);
+						result.put(url, v == null ? 1 : v+1);
+					}
+				}
+				considered.add(url);
+			}
+		return result;
+	}
+
 	/* Also iterates through children summaries and merges. Again for visited = false also
 	 * but they are empty.
 	 */
@@ -83,6 +105,15 @@ class ContentSummary {
 			String word = it.next();
 			Integer v = summary.get(word);
 			summary.put(word, v == null ? 1 : v+1);
+		}
+	}
+
+	public void removeWordCounts (HashSet<String> words, Integer count) {
+		for (Iterator<String> it = words.iterator(); it.hasNext(); ) {
+			String word = it.next();
+			Integer v = summary.get(word);
+			/* v cannot be null because word is from child and have merged child */
+			summary.put(word, v-v*count);
 		}
 	}
 
