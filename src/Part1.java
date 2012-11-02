@@ -113,7 +113,6 @@ public class Part1 {
 				System.out.println("Coverage for category:"+childNode.name+" is "+ec_list[i]);
 				// check if the specificity and coverage are above threshold
 				if (es>=t_es && ec_list[i]>=t_ec){
-					// System.out.println("es>=t_ec && ec_list[i]>=t_ec! for node="+childNode.name);
 					// get the categorization results for this child, and add it to the results for node c
 					ArrayList<TreeNode> newResults = getCategoryResults(childNode, site, t_es, t_ec, es);
 					results.addAll(newResults);
@@ -123,7 +122,6 @@ public class Part1 {
 
 		// check if results is still empty
 		if (results.size()==0){
-			c.visited = true;
 			results.add(c);
 			return results;
 		}
@@ -137,16 +135,13 @@ public class Part1 {
 
 		BingSearch searcher = new BingSearch(accountKey);
 		ArrayList<String> queryList = node.queryList;
-		// try{
-			for (int i = 0; i<queryList.size(); i++){
-	            // Thread.sleep(100);
-				String query = queryList.get(i);
-				int number = searcher.getDocNum(site, query);
-				coverage += number;
-			}
-		// } catch (InterruptedException e) {
-		// 	System.err.println("Error: " + e);
-		// }
+		// sum up the # of matching docs for all the queries in this node
+		for (int i = 0; i<queryList.size(); i++){
+			String query = queryList.get(i);
+			int number = searcher.getDocNum(site, query);
+			coverage += number;
+		}
+
 		return coverage;
 	}
 }
