@@ -127,34 +127,3 @@ public class SchemeTree {
 		}
 	}
 }
-
-// node in this scheme tree
-class TreeNode{
-	String name; // category name for this node,e.g., Computers
-	TreeNode parent = null;
-	ArrayList<TreeNode> children;
-	ArrayList<String> queryList;
-	HashSet<String> retrievedURLs; // set of top 4 results for each query probe
-	boolean isLeaf = true; // default is leaf, unless it has >=1 children
-	boolean visited = false; // Whether this node was deemed worthy of expansion
-	
-	TreeNode(String name){
-		this.name = name;
-		// initialization
-		children = new ArrayList<TreeNode>();
-		queryList = new ArrayList<String>();
-		retrievedURLs = new HashSet<String>();
-	}
-
-	void setParent(TreeNode parent){
-		this.parent = parent;
-	}
-
-	void addChild(TreeNode child){
-		this.children.add(child);
-	}
-
-	void addQuery(String query){
-		this.queryList.add(query);
-	}
-}
